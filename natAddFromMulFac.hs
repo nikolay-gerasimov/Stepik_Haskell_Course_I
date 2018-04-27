@@ -13,7 +13,13 @@ add Zero y = y
 add x Zero = x
 add (Suc x) (Suc y) = Suc (add x (Suc y))
 
+{-
 mul :: Nat -> Nat -> Nat
 mul Zero y = Zero
 mul x Zero = Zero
-mul (Suc x) (Suc y) = helper (Suc x) (Suc y) fromNat (Suc y) 
+mul (Suc x) (Suc y) = 
+-}
+
+--repeatNtimes :: (a->b) -> Int -> (a->b)
+repeatNtimes f 1 = f
+repeatNtimes f n = f (repeatNtimes f (n-1)) 
