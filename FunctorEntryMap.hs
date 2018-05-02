@@ -12,9 +12,8 @@ data Entry k1 k2 v = Entry (k1, k2) v  deriving Show
 data Map k1 k2 v = Map [Entry k1 k2 v]  deriving Show
 
 instance Functor (Entry k1 k2) where
-    -- fmap :: (a->b) -> f a -> f b
-    -- fmap :: (a->b) -> (Entry k1 k2) a -> (Entry k1 k2) b
-    fmap func ((Entry k1 k2) v) =  (Entry k1 k2) (func v)
+    fmap func (Entry (a,b) v) =  Entry (a,b) (func v)
 
 instance Functor (Map k1 k2) where
-    fmap = undefined
+    fmap _ (Map []) = Map []
+    fmap func (Map xs) = Map (map (fmap func) xs)
