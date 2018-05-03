@@ -1,3 +1,11 @@
+import Control.Monad (liftM, ap)
+
+instance Functor Log where
+    fmap = liftM
+instance Applicative Log where 
+    pure = return
+    (<*>) = ap
+
 data Log a = Log [String] a deriving Show
 toLogger :: (a -> b) -> String -> (a -> Log b)
 toLogger f msg param = Log [msg] (f param) 
