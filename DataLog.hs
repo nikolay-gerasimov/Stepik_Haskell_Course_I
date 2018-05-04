@@ -12,7 +12,7 @@ toLogger f msg param = Log [msg] (f param)
 
 instance Monad Log where
     return = returnLog
-    (>>=) = bindLog
+    (>>=) = bindLog''
 
 execLoggers :: a -> (a -> Log b) -> (b -> Log c) -> Log c
 execLoggers x f g = case (f x) of
@@ -22,6 +22,14 @@ execLoggers x f g = case (f x) of
 bindLog :: Log a -> (a -> Log b) -> Log b
 bindLog (Log msg value) klyasli = case (klyasli value) of
     (Log msg1 value2) -> Log (msg++msg1) value2
+
+bindLog' :: Log a -> (a -> Log b) -> Log b
+bindLog' (Log msg value) klyasli = case (klyasli value) of
+    (Log msg1 value2) -> Log (msg1++msg) value2
+
+bindLog'' :: Log a -> (a -> Log b) -> Log b
+bindLog'' (Log msg value) klyasli = case (klyasli value) of
+    (Log msg1 value2) -> Log (msg1++msg++msg1) value2
 
 execLoggersList :: a -> [a -> Log a] -> Log a
 execLoggersList param [] = return param
@@ -34,3 +42,6 @@ returnLog x = Log [] x
 
 add1Log = toLogger (+1) "added one"
 mult2Log = toLogger (* 2) "multiplied by 2"
+
+kl x = Log ["double x"] (x+x)
+kk x = Log ["err x"] (x*(-1))
