@@ -19,8 +19,9 @@ getFileList = do
     a <- getDirectoryContents "."
     return a
     
-delete :: IO String
-delete = undefined
+deleteFile :: FilePath -> IO ()
+deleteFile f = do
+    removeFile f
 
 main' :: IO [FilePath] 
 main' = do
@@ -29,7 +30,11 @@ main' = do
     if substringToDelete == "" then do 
         putStrLn "Canceled"
         return []
-        else do
-            a <- getDirectoryContents "."
-            putStr $ concat $ map (\x -> x ++ " ") a
-            return a
+        else
+            if substringToDelete == "lold" then do 
+                deleteFile "lold.hs"
+                return []
+            else do
+                   a <- getDirectoryContents "."
+                   putStr $ concat $ map (\x -> x ++ " ") a
+                   return a
