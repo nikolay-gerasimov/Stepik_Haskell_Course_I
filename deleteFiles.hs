@@ -13,6 +13,10 @@ Canceled
 Для получения списка файлов в текущей директории используйте функцию getDirectoryContents, передавая ей в качестве аргумента строку, состоящую из одной точки  ("."), что означает «текущая директория». Для удаления файлов используйте функцию removeFile (считайте, что в текущей директории нет поддиректорий — только простые файлы). В выводимых сообщениях удаленные файлы должны быть перечислены в том же порядке, в котором их возвращает функция getDirectoryContents.
 Пожалуйста, строго соблюдайте приведенный в примере формат вывода. Особое внимание уделите пробелам и переводам строк! Не забудьте про пробел после Substring:, а также про перевод строки в конце (ожидается, что вы будете использовать putStrLn для вывода сообщений об удалении). -}
 import System.Directory
+import Data.List
+
+isFileSubstingOf :: String -> [FilePath] -> [FilePath]
+isFileSubstingOf subString fileList = map snd $ filter (\(f,s)->f) $ zip (map (isInfixOf subString) fileList) fileList
 
 getFileList :: IO [FilePath]
 getFileList = do
@@ -36,5 +40,6 @@ main' = do
                 return []
             else do
                    a <- getDirectoryContents "."
-                   putStr $ concat $ map (\x -> x ++ " ") a
+                   let filesToDelete = isFileSubstingOf substringToDelete a
+                   mapM_ putStrLn filesToDelete 
                    return a
