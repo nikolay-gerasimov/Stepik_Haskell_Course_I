@@ -25,21 +25,16 @@ getFileList = do
     
 deleteFile :: FilePath -> IO ()
 deleteFile f = do
+    putStrLn ("Removing file: "++f)
     removeFile f
 
-main' :: IO [FilePath] 
+main' :: IO () 
 main' = do
     putStr "Substring: "
     substringToDelete <- getLine
     if substringToDelete == "" then do 
         putStrLn "Canceled"
-        return []
-        else
-            if substringToDelete == "lold" then do 
-                deleteFile "lold.hs"
-                return []
-            else do
-                   a <- getDirectoryContents "."
-                   let filesToDelete = isFileSubstingOf substringToDelete a
-                   mapM_ putStrLn filesToDelete 
-                   return a
+        else do
+            allFiles <- getFileList 
+            let filesToDelete = isFileSubstingOf substringToDelete allFiles
+            mapM_ deleteFile filesToDelete
